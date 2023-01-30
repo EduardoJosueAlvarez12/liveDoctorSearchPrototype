@@ -36,7 +36,7 @@ export default {
                     return;
                 }
                 state.noSearch = false;
-                state.searchResults = res.data.map(doctor => doctor.name);
+                state.searchResults = res.data.map(doctor => `${doctor.name} ${doctor.lastName}`);
             }).catch(err => {throw new Error(err)});
         }
 

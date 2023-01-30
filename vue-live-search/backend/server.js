@@ -11,8 +11,7 @@ db.once('open', async () => {
     if(await Doctor.countDocuments().exec() > 0) return;
     let submitDoctors = [];
     doctors.forEach(doctor => {
-        submitDoctors.push({name: doctor});
-        //submitDoctors.push({name: doctor.name, lastname: doctor.lastname});
+        submitDoctors.push({name: doctor.name, lastName: doctor.lastName});
     });
     Doctor.insertMany(submitDoctors, err => {
         if(err) return console.log(err);
@@ -26,7 +25,7 @@ app.use(express.urlencoded({extended: true}));
 
 app.post('/api/search', async (req, res) => {
     let search = req.body.search;
-    let find = await Doctor.find({name: {$regex: new RegExp('.*'+search+'.*','i')}}).limit(10).exec();
+    let find = await Doctor.find({$or: [{name: {$regex: new RegExp('.*'+search+'.*','i')}}, {lastName: {$regex: new RegExp('.*'+search+'.*','i')}}]}).limit(10).exec();
     res.send(find);
 });
 
